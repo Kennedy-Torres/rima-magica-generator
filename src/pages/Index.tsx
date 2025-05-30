@@ -12,6 +12,19 @@ const Index = () => {
   const [error, setError] = useState('');
   const { toast } = useToast();
 
+  // Função para processar texto e converter **texto** em negrito
+  const formatTextWithBold = (text: string) => {
+    const parts = text.split(/(\*\*[^*]+\*\*)/g);
+    
+    return parts.map((part, index) => {
+      if (part.startsWith('**') && part.endsWith('**')) {
+        const boldText = part.slice(2, -2);
+        return <strong key={index} className="font-bold text-purple-700">{boldText}</strong>;
+      }
+      return part;
+    });
+  };
+
   const handleGenerateRhyme = async () => {
     // Validação de entrada
     if (!inputText.trim()) {
@@ -92,49 +105,60 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen relative overflow-hidden">
-      {/* Elementos flutuantes de fundo */}
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-800">
+      {/* Elementos flutuantes de fundo - mais musicais */}
       <div className="floating-elements">
         <div className="floating-element">
-          <Music size={60} className="text-purple-300" />
+          <Music size={60} className="text-yellow-300/30" />
         </div>
         <div className="floating-element">
-          <Lightbulb size={45} className="text-blue-300" />
+          <Music size={45} className="text-pink-300/20" />
         </div>
         <div className="floating-element">
-          <Sparkles size={50} className="text-pink-300" />
+          <Mic size={50} className="text-blue-300/25" />
         </div>
         <div className="floating-element">
-          <Mic size={55} className="text-indigo-300" />
+          <Music size={55} className="text-purple-300/30" />
+        </div>
+        <div className="floating-element">
+          <Mic size={40} className="text-yellow-300/20" />
         </div>
       </div>
 
-      {/* Gradiente de fundo */}
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-blue-50 to-indigo-100"></div>
+      {/* Notas musicais animadas */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="music-note-1">♪</div>
+        <div className="music-note-2">♫</div>
+        <div className="music-note-3">♪</div>
+        <div className="music-note-4">♫</div>
+      </div>
       
       {/* Conteúdo principal */}
       <div className="relative z-10 container mx-auto px-4 py-8 max-w-4xl">
         <div className="text-center mb-12 animate-fade-in">
           {/* Título principal */}
           <h1 className="text-5xl md:text-6xl lg:text-7xl font-montserrat font-bold mb-6 leading-tight">
-            <span className="gradient-text">Transforme Suas Palavras</span>
+            <span className="bg-gradient-to-r from-yellow-300 via-pink-300 to-purple-300 bg-clip-text text-transparent">
+              Transforme Suas Palavras
+            </span>
             <br />
-            <span className="text-gray-800">em Rimas com IA</span>
+            <span className="text-white">em Rimas com IA</span>
           </h1>
           
           {/* Subtítulo */}
-          <p className="text-xl md:text-2xl text-gray-600 font-poppins font-light leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl md:text-2xl text-purple-100 font-poppins font-light leading-relaxed max-w-3xl mx-auto">
             Diga adeus ao bloqueio criativo. Digite suas palavras-chave e deixe nossa 
             inteligência artificial criar a rima perfeita para sua música, poema ou post em segundos.
           </p>
         </div>
 
         {/* Card principal com o gerador */}
-        <Card className="max-w-2xl mx-auto shadow-2xl border-0 bg-white/80 backdrop-blur-sm animate-scale-in">
+        <Card className="max-w-2xl mx-auto shadow-2xl border-0 bg-white/90 backdrop-blur-md animate-scale-in">
           <CardContent className="p-8">
             {/* Campo de entrada */}
             <div className="space-y-4 mb-6">
-              <label htmlFor="palavras-input" className="block text-lg font-semibold text-gray-800 font-montserrat">
+              <label htmlFor="palavras-input" className="block text-lg font-semibold text-gray-800 font-montserrat flex items-center gap-2">
+                <Music className="h-5 w-5 text-purple-600" />
                 Digite as palavras que devem estar na rima:
               </label>
               <Textarea
@@ -142,7 +166,7 @@ const Index = () => {
                 placeholder="Ex: noite, luar, mar, canção, coração"
                 value={inputText}
                 onChange={(e) => setInputText(e.target.value)}
-                className="min-h-[120px] text-lg p-4 rounded-xl border-2 border-gray-200 focus:border-purple-400 focus:ring-purple-400 resize-none font-poppins"
+                className="min-h-[120px] text-lg p-4 rounded-xl border-2 border-purple-200 focus:border-purple-500 focus:ring-purple-500 resize-none font-poppins"
                 disabled={isLoading}
               />
               {error && (
@@ -154,7 +178,7 @@ const Index = () => {
             <Button
               onClick={handleGenerateRhyme}
               disabled={isLoading}
-              className="gradient-button w-full text-white font-bold py-4 px-8 text-lg rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 w-full text-white font-bold py-4 px-8 text-lg rounded-xl font-montserrat shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105"
             >
               {isLoading ? (
                 <>
@@ -163,7 +187,7 @@ const Index = () => {
                 </>
               ) : (
                 <>
-                  <Sparkles className="mr-2 h-5 w-5" />
+                  <Music className="mr-2 h-5 w-5" />
                   Criar Rima!
                 </>
               )}
@@ -173,11 +197,14 @@ const Index = () => {
 
         {/* Área de resultado */}
         <div className="max-w-2xl mx-auto mt-8">
-          <Card className="shadow-xl border-0 bg-gradient-to-r from-purple-50 to-blue-50 min-h-[200px] animate-fade-in">
+          <Card className="shadow-xl border-0 bg-gradient-to-r from-purple-50/90 to-pink-50/90 backdrop-blur-md min-h-[200px] animate-fade-in">
             <CardContent className="p-8">
               {isLoading ? (
                 <div className="flex flex-col items-center justify-center py-12">
-                  <Loader2 className="h-12 w-12 animate-spin text-purple-600 mb-4" />
+                  <div className="relative">
+                    <Loader2 className="h-12 w-12 animate-spin text-purple-600 mb-4" />
+                    <Music className="h-6 w-6 text-pink-500 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                  </div>
                   <p className="text-lg text-gray-600 font-medium animate-pulse-slow">
                     Nossa IA está criando versos mágicos para você...
                   </p>
@@ -185,28 +212,29 @@ const Index = () => {
               ) : generatedRhyme ? (
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-xl font-semibold text-gray-800 font-montserrat">
+                    <h3 className="text-xl font-semibold text-gray-800 font-montserrat flex items-center gap-2">
+                      <Music className="h-5 w-5 text-purple-600" />
                       Sua rima genial:
                     </h3>
                     <Button
                       onClick={copyToClipboard}
                       variant="outline"
                       size="sm"
-                      className="hover:bg-purple-100 transition-colors"
+                      className="hover:bg-purple-100 transition-colors border-purple-200"
                     >
                       <Copy className="h-4 w-4 mr-2" />
                       Copiar
                     </Button>
                   </div>
-                  <div className="bg-white/70 rounded-lg p-6 border-l-4 border-purple-400">
+                  <div className="bg-white/80 rounded-lg p-6 border-l-4 border-purple-500 shadow-inner">
                     <p className="text-lg leading-relaxed text-gray-800 font-poppins whitespace-pre-wrap">
-                      {generatedRhyme}
+                      {formatTextWithBold(generatedRhyme)}
                     </p>
                   </div>
                 </div>
               ) : (
                 <div className="flex flex-col items-center justify-center py-12 text-center">
-                  <div className="w-16 h-16 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full flex items-center justify-center mb-4 animate-bounce-gentle">
+                  <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center mb-4 animate-bounce-gentle">
                     <Music className="h-8 w-8 text-white" />
                   </div>
                   <p className="text-lg text-gray-600 font-medium">
@@ -223,7 +251,8 @@ const Index = () => {
 
         {/* Rodapé com dicas */}
         <div className="text-center mt-12 animate-fade-in">
-          <p className="text-gray-500 text-sm font-poppins">
+          <p className="text-purple-200 text-sm font-poppins flex items-center justify-center gap-2">
+            <Music className="h-4 w-4" />
             💡 Dica: Use palavras relacionadas ao tema da sua criação para obter rimas mais relevantes
           </p>
         </div>
