@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
@@ -47,16 +46,20 @@ const Index = () => {
       }
 
       const data = await response.json();
-      console.log('Resposta da API:', data);
+      console.log('Resposta completa da API:', data);
 
-      if (data.rima) {
-        setGeneratedRhyme(data.rima);
+      // Verificar se existe 'rima' ou 'output' na resposta
+      const rhymeContent = data.rima || data.output;
+      
+      if (rhymeContent) {
+        setGeneratedRhyme(rhymeContent);
+        console.log('Rima extraída:', rhymeContent);
         toast({
           title: "Rima criada!",
           description: "Sua rima foi gerada com sucesso. Que tal compartilhar?",
         });
       } else {
-        throw new Error('Resposta da API não contém rima');
+        throw new Error('Resposta da API não contém rima nem output');
       }
     } catch (error) {
       console.error('Erro ao gerar rima:', error);
