@@ -45,7 +45,7 @@ const Index = () => {
     try {
       console.log('Enviando requisição para API do n8n:', inputText);
       
-      const response = await fetch('https://kennedy-torres.app.n8n.cloud/webhook/URLDOVIDEO', {
+      const response = await fetch('https://amanda-torres.app.n8n.cloud/webhook/rima-magica', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
